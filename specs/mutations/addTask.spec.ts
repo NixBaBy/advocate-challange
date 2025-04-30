@@ -1,3 +1,4 @@
+import { Task } from "@/graphql/models";
 import { addTask } from "@/graphql/resolvers/mutations/addTask";
 
 jest.mock("../../graphql/models", () => ({
@@ -7,28 +8,22 @@ jest.mock("../../graphql/models", () => ({
 }));
 
 describe("add task mutation", () => {
-  const input = {
+  const mockInput = {
     taskName: "Task1",
     description: "Description 1",
     priority: 1,
     tags: ["tags1"],
+    isDone: false,
   };
 
   it("1. should return created task successfully", async () => {
-    const { Task } = require("../../graphql/models");
-    Task.create.mockResolvedValueOnce({
-      taskName: "Task1",
-      description: "Description 1",
-      priority: 1,
-      tags: ["tags1"],
+    (Task.create as jest.Mock).mockResolvedValueOnce({
+      ...mockInput,
     });
 
-    const result = await addTask({}, { input });
+    const result = await addTask({}, { input: mockInput });
     expect(result).toEqual({
-      taskName: "Task1",
-      description: "Description 1",
-      priority: 1,
-      tags: ["tags1"],
+      ...mockInput,
     });
   });
 
@@ -38,6 +33,7 @@ describe("add task mutation", () => {
       description: "Same Name",
       priority: 1,
       tags: ["tags1"],
+      isDone: false,
     };
 
     try {
@@ -53,7 +49,7 @@ describe("add task mutation", () => {
       new Error("Failed to add task. Please try again later.")
     );
 
-    await expect(addTask({}, { input })).rejects.toThrow(
+    await expect(addTask({}, { input: mockInput })).rejects.toThrow(
       "Failed to add task. Please try again later."
     );
   });

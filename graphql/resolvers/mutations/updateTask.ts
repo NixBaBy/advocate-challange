@@ -1,8 +1,9 @@
+import { TaskUpdateInput } from "@/generated";
 import { Task } from "@/graphql/models";
 
 export const updateTask = async (
   _: unknown,
-  { taskId, input }: { taskId: string; input: any }
+  { taskId, input }: { taskId: string; input: TaskUpdateInput }
 ) => {
   try {
     const updatedTask = await Task.findByIdAndUpdate(

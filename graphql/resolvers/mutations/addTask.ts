@@ -1,6 +1,14 @@
+import { AddTaskInput } from "@/generated";
 import { Task } from "@/graphql/models";
 
-export const addTask = async (_: unknown, { input }: { input: any }) => {
+export const addTask = async (
+  _: unknown,
+  {
+    input,
+  }: {
+    input: AddTaskInput;
+  }
+) => {
   try {
     if (input.taskName === input.description) {
       throw new Error("description cannot be the same as taskName");

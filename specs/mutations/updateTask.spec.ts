@@ -8,27 +8,23 @@ jest.mock("../../graphql/models", () => ({
 }));
 
 describe("update task mutation", () => {
-  const input = {
+  const mockInput = {
     taskName: "Task2",
     description: "Description 2",
     priority: 2,
     tags: ["tags2"],
+    isDone:true
   };
 
   it("1. should successfully update task", async () => {
     (Task.findByIdAndUpdate as jest.Mock).mockResolvedValueOnce({
-      taskName: "Task2",
-      description: "Description 2",
-      priority: 2,
-      tags: ["tags2"],
+      ...mockInput,
+      isDone: true,
     });
 
-    const result = await updateTask({}, { taskId: "taskId", input });
+    const result = await updateTask({}, { taskId: "taskId", input: mockInput });
     expect(result).toEqual({
-      taskName: "Task2",
-      description: "Description 2",
-      priority: 2,
-      tags: ["tags2"],
+      ...mockInput,
     });
   });
 
